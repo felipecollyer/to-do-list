@@ -4,9 +4,9 @@ import dbServer from './config/database.js';
 const start = async () => {
   const app = createApp();
 
-  try {
+  try {  
     await app.listen({ port: 3000 });
-    await dbServer.$connect()
+    dbServer.$connect().then(()=> console.log(`conectado ao DB`))
   } catch (err) {
     app.log.error(err);
     process.exit(1);
