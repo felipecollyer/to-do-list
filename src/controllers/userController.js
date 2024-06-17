@@ -1,18 +1,25 @@
 import jwtService from '../services/jwtService.js';
 import UserService from '../services/userService.js';
+import cryptService from '../services/cryptService.js';
 
 class UserController {
 
   async loginUser(req, reply) {
     try {
       const {email, password} = req.body
+
       const user = await UserService.getUserByEmail(email);
-      const checkUser = await  UserService.verifyPassword(user, password)
+
+      const checkUser = await  cryptService.validatePassword(password, user.password )
+
+      if(!checkUser) {
+        reply.status(500).send({ error: 'Password incorrect' });
+      }
 
       const token = await jwtService.createToken(checkUser)
 
       reply.status(201).send({ token: token});
- 
+
 
     } catch (error) {
       reply.status(500).send({ error: error.message });
@@ -42,8 +49,8 @@ class UserController {
   }
 
   async createUser(req, reply) {
-
     try {
+      
       const user = await UserService.createUser(req.body);
       reply.status(201).send(user);
     } catch (error) {

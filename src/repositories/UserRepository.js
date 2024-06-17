@@ -14,8 +14,8 @@ class UserRepository {
     return UserModel.getById(id);
   }
 
-  async save(userData) {
-    return UserModel.create(userData);
+  async save(userData,passwordCrypt) {
+    return UserModel.create(userData,passwordCrypt);
   }
 
   async update(id, userData) {

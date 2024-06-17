@@ -23,8 +23,13 @@ class UserModel {
     }
   }
 
-  async create(data) {
-    return prisma.user.create({ data });
+  async create(data,passwordCrypt) {
+    return prisma.user.create({
+      data: {
+        email: data.email,
+        password: passwordCrypt
+     }
+    })  
   }
 
   async update(id, data) {

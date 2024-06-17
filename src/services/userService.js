@@ -1,20 +1,11 @@
 import UserRepository from '../repositories/UserRepository.js';
+import cryptoService from '../services/cryptService.js'
+
 
 class UserService {
 
   async getUserByEmail(email) {
     return UserRepository.findUserEmail(email);
-  }
-
-   async verifyPassword(user, password) {
-
-    const {id, email} = user
-
-    if(user.password  === password) {
-      return {id, email}
-    }else {
-      return false
-    }
   }
 
   async getAllUsers() {
@@ -30,7 +21,8 @@ class UserService {
   }
 
   async createUser(data) {
-    return UserRepository.save(data);
+    const passwordCrypt = await cryptoService.generatePassword(data.password)
+    return UserRepository.save(data,passwordCrypt);
   }
 
   async updateUser(id, data) {

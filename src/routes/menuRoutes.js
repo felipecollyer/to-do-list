@@ -5,6 +5,7 @@ async function menuRoutes(fastify, options) {
   fastify.post('/login', UserController.loginUser);
   fastify.get('/jwt', jwtService.verifyToken);
 
+  
 }
 
 export default menuRoutes;
