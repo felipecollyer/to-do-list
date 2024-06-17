@@ -1,6 +1,11 @@
 import UserModel from '../models/UserModel.js';
 
 class UserRepository {
+
+  async findUserEmail(email) {
+    return UserModel.getByEmail(email);
+  }
+
   async findAll() {
     return UserModel.getAll();
   }

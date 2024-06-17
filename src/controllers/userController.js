@@ -1,6 +1,24 @@
+import jwtService from '../services/jwtService.js';
 import UserService from '../services/userService.js';
 
 class UserController {
+
+  async loginUser(req, reply) {
+    try {
+      const {email, password} = req.body
+      const user = await UserService.getUserByEmail(email);
+      const checkUser = await  UserService.verifyPassword(user, password)
+
+      const token = await jwtService.createToken(checkUser)
+
+      reply.status(201).send({ token: token});
+ 
+
+    } catch (error) {
+      reply.status(500).send({ error: error.message });
+    }
+  }
+
   async getAllUsers(req, reply) {
     try {
       const users = await UserService.getAllUsers();
@@ -24,6 +42,7 @@ class UserController {
   }
 
   async createUser(req, reply) {
+
     try {
       const user = await UserService.createUser(req.body);
       reply.status(201).send(user);
@@ -33,7 +52,6 @@ class UserController {
   }
 
   async updateUser(req, reply) {
-    
     try {
       const user = await UserService.updateUser(req.params.id, req.body);
       reply.send(user);
@@ -50,7 +68,7 @@ class UserController {
     } catch (error) {
       reply.status(400).send({ error: error.message });
     }
-  }
+  } 
 }
 
 export default new UserController();

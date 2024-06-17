@@ -1,6 +1,22 @@
 import UserRepository from '../repositories/UserRepository.js';
 
 class UserService {
+
+  async getUserByEmail(email) {
+    return UserRepository.findUserEmail(email);
+  }
+
+   async verifyPassword(user, password) {
+
+    const {id, email} = user
+
+    if(user.password  === password) {
+      return {id, email}
+    }else {
+      return false
+    }
+  }
+
   async getAllUsers() {
     return UserRepository.findAll();
   }
