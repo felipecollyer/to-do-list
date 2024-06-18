@@ -1,5 +1,5 @@
 import UserRepository from '../repositories/UserRepository.js';
-import cryptoService from '../services/cryptService.js'
+import bcryptService from './bcryptService.js';
 
 
 class UserService {
@@ -21,8 +21,8 @@ class UserService {
   }
 
   async createUser(data) {
-    const passwordCrypt = await cryptoService.generatePassword(data.password)
-    return UserRepository.save(data,passwordCrypt);
+    const passwordHash = await bcryptService.createdHash(data.password)
+    return UserRepository.save(data,passwordHash);
   }
 
   async updateUser(id, data) {

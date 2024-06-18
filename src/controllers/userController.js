@@ -1,6 +1,6 @@
 import jwtService from '../services/jwtService.js';
 import UserService from '../services/userService.js';
-import cryptService from '../services/cryptService.js';
+import bcryptService from '../services/bcryptService.js';
 
 class UserController {
 
@@ -10,7 +10,7 @@ class UserController {
 
       const user = await UserService.getUserByEmail(email);
 
-      const checkUser = await  cryptService.validatePassword(password, user.password )
+      const checkUser = await  bcryptService.checkHash(password, user.password )
 
       if(!checkUser) {
         reply.status(500).send({ error: 'Password incorrect' });
@@ -50,7 +50,6 @@ class UserController {
 
   async createUser(req, reply) {
     try {
-      
       const user = await UserService.createUser(req.body);
       reply.status(201).send(user);
     } catch (error) {
