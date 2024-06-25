@@ -2,12 +2,14 @@ import TaskRepository from '../repositories/TaskRepository.js';
 import jwtService from './jwtService.js';
 
 class TaskService {
-  async getAllTasks() {
-    return TaskRepository.findAll();
+  async getAllTasks(authorization) {
+    const dataToken =  await jwtService.verifyToken(authorization)
+    return TaskRepository.findAll(dataToken);
   }
 
-  async getTaskById(id) {
-    const task = await TaskRepository.findById(id);
+  async getTaskById(id, authorization) {
+    const dataToken =  await jwtService.verifyToken(authorization)
+    const task = await TaskRepository.findById(id,dataToken);
     if (!task) {
       throw new Error('Task not found');
     }
@@ -19,12 +21,16 @@ class TaskService {
     return TaskRepository.save(data,dataToken);
   }
 
-  async updateTask(id, data, idUser) {
-    return TaskRepository.update(id, data,idUser);
+  async updateTask(id, data, authorization) {
+    const dataToken =  await jwtService.verifyToken(authorization)
+
+    return TaskRepository.update(id, data,dataToken);
   }
 
-  async deleteTask(id) {
-    return TaskRepository.remove(id);
+  async deleteTask(id,authorization) {
+    const dataToken =  await jwtService.verifyToken(authorization)
+
+    return TaskRepository.remove(id,dataToken);
   }
 }
 

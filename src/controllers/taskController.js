@@ -3,7 +3,8 @@ import TaskService from '../services/taskService.js';
 class TaskController {
   async getAllTasks(req, reply) {
     try {
-      const tasks = await TaskService.getAllTasks();
+      const {authorization} = req.headers
+      const tasks = await TaskService.getAllTasks(authorization);
       reply.send(tasks);
     } catch (error) {
       reply.status(500).send({ error: error.message });
@@ -12,7 +13,8 @@ class TaskController {
 
   async getTaskById(req, reply) {
     try {
-      const task = await TaskService.getTaskById(req.params.id);
+      const {authorization} = req.headers
+      const task = await TaskService.getTaskById(req.params.id , authorization);
       if (!task) {
         reply.status(404).send({ error: 'Tarefa não encontrada' });
         return;
@@ -35,8 +37,9 @@ class TaskController {
 
   async updateTask(req, reply) {
     try {
-      const idUser = req.headers.authorization.split(' ')[1]
-      const task = await TaskService.updateTask(req.params.id, req.body, idUser);
+
+      const {authorization} = req.headers
+      const task = await TaskService.updateTask(req.params.id, req.body, authorization);
       reply.send(task);
     } catch (error) {
       reply.status(400).send({ error: error.message });
@@ -45,7 +48,8 @@ class TaskController {
 
   async deleteTask(req, reply) {
     try {
-      await TaskService.deleteTask(req.params.id);
+      const {authorization} = req.headers
+      await TaskService.deleteTask(req.params.id, authorization);
       reply.status(204).send(req.params.id);
     } catch (error) {
       reply.status(400).send({ error: error.message });

@@ -1,13 +1,18 @@
 import prisma from '../config/database.js';
 
 class TaskModel {
-  async getAll() {
-    return prisma.task.findMany();
+  async getAll(id) {
+    return prisma.task.findMany({where: {userId: id}});
   }
 
-  async getById(id) {
+  async getById(id, userId) {
     try {
-      return prisma.task.findUnique({ where: { id } });
+      return prisma.task.findFirst({ where: { 
+        AND: [
+          {id},
+          {userId: userId}
+        ]
+       } });
     } catch (error) {
       throw new Error(`Error while fetching task with ID ${id}: ${error.message}`);
     }
@@ -30,13 +35,17 @@ class TaskModel {
 
   async update(id, data, idUser) {
     try {
-      return prisma.task.update({
-        where: { id },
+      return prisma.task.updateMany({
+        where: { 
+          AND: [
+            {id},
+            {userId: idUser}
+          ]
+         } ,
         data: {
           title: data.title,
           content: data.content,
           status:data.status,
-          userId: idUser
         }
       });
     } catch (error) {
@@ -44,9 +53,16 @@ class TaskModel {
     }
   }
 
-  async delete(id) {
+  async delete(id,userId) {
     try {
-      return prisma.task.delete({ where: { id } });
+      return prisma.task.deleteMany({
+        where: { 
+          AND: [
+            {id},
+            {userId: userId}
+          ]
+         }
+       });
     } catch (error) {
       throw new Error(`Error while deleting task with ID ${id}: ${error.message}`);
     }
@@ -54,3 +70,4 @@ class TaskModel {
 }
 
 export default new TaskModel();
+
