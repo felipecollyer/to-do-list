@@ -1,4 +1,5 @@
 import TaskRepository from '../repositories/TaskRepository.js';
+import jwtService from './jwtService.js';
 
 class TaskService {
   async getAllTasks() {
@@ -13,8 +14,9 @@ class TaskService {
     return task;
   }
 
-  async createTask(data, idUser) {
-    return TaskRepository.save(data,idUser);
+  async createTask(data, authorization) {
+    const dataToken =  await jwtService.verifyToken(authorization)
+    return TaskRepository.save(data,dataToken);
   }
 
   async updateTask(id, data, idUser) {

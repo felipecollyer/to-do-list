@@ -5,10 +5,10 @@ import dbServer from './config/database.js';
 const port = process.env.SERVER_PORT
 
 const start = async () => {
-  const app = createApp();
+  const app = await createApp();
 
   try {
-    await app.listen({ port });
+    app.listen({ port });
     console.log(`Servidor conectado na porta ${port}`);
 
     await dbServer.$connect();

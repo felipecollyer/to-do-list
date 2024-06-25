@@ -25,8 +25,8 @@ class TaskController {
 
   async createTask(req, reply) {
     try {
-      const idUser = req.headers.authorization.split(' ')[1]
-      const task = await TaskService.createTask(req.body, idUser);
+      const {authorization} = req.headers
+      const task = await TaskService.createTask(req.body, authorization);
       reply.status(201).send(task);
     } catch (error) {
       reply.status(400).send({ error: error.message });

@@ -9,8 +9,10 @@ class TaskRepository {
     return TaskModel.getById(id);
   }
 
-  async save(taskData,idUser) {
-    return TaskModel.create(taskData,idUser);
+  async save(taskData,dataToken) {
+    const {data:{ id, email}} = dataToken 
+
+    return TaskModel.create(taskData,id);
   }
 
   async update(id, taskData, idUser) {

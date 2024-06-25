@@ -13,14 +13,14 @@ class TaskModel {
     }
   }
 
-  async create(data, idUser) {
+  async create(data, id) {
     try {
       return prisma.task.create({ 
       data: {
         title: data.title,
         content: data.content,
         status:data.status,
-        userId: idUser
+        userId: id
       }
       });
     } catch (error) {
