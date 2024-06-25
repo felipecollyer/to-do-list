@@ -9,14 +9,13 @@ class UserController {
       const {email, password} = req.body
 
       const user = await UserService.getUserByEmail(email);
-
       const checkUser = await  bcryptService.checkHash(password, user.password )
 
       if(!checkUser) {
         reply.status(500).send({ error: 'Password incorrect' });
       }
-
-      const token = await jwtService.createToken(checkUser)
+      
+      const token = await jwtService.createToken(user)
 
       reply.status(201).send({ token: token});
 

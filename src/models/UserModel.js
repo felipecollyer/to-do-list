@@ -17,7 +17,7 @@ class UserModel {
 
   async getByEmail(email) {
     try {
-      return prisma.user.findUnique({ where: { email:email  } });
+      return prisma.user.findUnique({ where: { email:email  } },);
     } catch (error) {
       return error
     }

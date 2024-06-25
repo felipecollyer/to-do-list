@@ -11,8 +11,10 @@ class jwtService {
     reply.status(200).send(decoded);
   }
 
-  async createToken(checkUser) {
-    return jwt.sign({ data: checkUser }, secret);
+  async createToken(user) {
+    return jwt.sign({ data: {id: user.id,
+      email: user.email
+    } }, secret);
   }
 }
 
